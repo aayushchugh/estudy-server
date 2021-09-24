@@ -16,12 +16,15 @@ export async function postUser(req, res) {
 			password: hashedPassword,
 		});
 
-		res.json({
+		return res.json({
 			status: 201,
 			message: 'successfully created new user',
 			data: user,
 		});
 	} catch (err) {
+		console.log('====================================');
+		console.log(err);
+		console.log('====================================');
 		res.json({ status: 400, message: 'Duplicate email' });
 	}
 }
