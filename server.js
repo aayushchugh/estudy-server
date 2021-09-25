@@ -6,14 +6,6 @@ import app from './app.js';
 
 const PORT = process.env.PORT || 8000;
 
-mongoose.connect(
-	process.env.DB_URL,
-	{
-		useUnifiedTopology: true,
-		useNewUrlParser: true,
-		useFindAndModify: false,
-	},
-	() => {
-		app.listen(PORT);
-	}
-);
+mongoose.connect(process.env.DB_URL, () => {
+	app.listen(PORT);
+});
