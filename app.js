@@ -2,7 +2,8 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 
-import { default as userRouter } from './routes/authRouter.js';
+import { default as authRouter } from './routes/authRouter.js';
+import { default as userRouter } from './routes/userRouter.js';
 
 const app = express();
 
@@ -13,10 +14,7 @@ app.use(cors());
 
 /* --------------------------------- routes --------------------------------- */
 
+app.use('/v1', authRouter);
 app.use('/v1', userRouter);
-
-app.get('/hello', (req, res) => {
-	res.send('Hello World!');
-});
 
 export default app;
