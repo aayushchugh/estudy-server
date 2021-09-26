@@ -77,6 +77,13 @@ export async function patchTestimonial(req, res) {
 		const { name, content, rating } = req.body;
 		const { id } = req.params;
 
+		if (rating > 5 || rating < 0) {
+			return res.send({
+				status: 400,
+				message: 'Rating must be between 0 and 5',
+			});
+		}
+
 		const updatedTestimonial = await testimonialModel.findByIdAndUpdate(
 			id,
 			{ name: name, content: content, rating: rating },
