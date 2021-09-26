@@ -31,8 +31,8 @@ export async function deleteUser(req, res) {
 		});
 	} catch (err) {
 		res.send({
-			status: 500,
-			message: 'internal server error',
+			status: 400,
+			message: 'invalid id',
 		});
 	}
 }

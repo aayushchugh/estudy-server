@@ -14,6 +14,7 @@ export async function postNewTestimonial(req, res) {
 
 		res.send({
 			status: 201,
+			message: 'testimonial created successfully',
 			data: newTestimonial,
 		});
 	} catch (err) {
@@ -50,27 +51,21 @@ export async function getSingleTestimonial(req, res) {
 
 		const testimonial = await testimonialModel.findById(id);
 
-		if (testimonial) {
-			res.send({
-				status: 200,
-				data: testimonial,
-			});
-		} else {
-			res.send({
-				status: 400,
-				message: 'invalid id',
-			});
-		}
+		res.send({
+			status: 200,
+			data: testimonial,
+		});
 	} catch (err) {
 		res.send({
-			status: 500,
-			message: 'internal server error',
+			status: 400,
+			message: 'invalid id',
 		});
 	}
 }
 
 /* --------------------------- update testimonial -------------------------- */
-export async function updateTestimonial(req, res) {
+
+export async function patchTestimonial(req, res) {
 	try {
 		const { name, content, rating } = req.body;
 		const { id } = req.params;
@@ -83,12 +78,34 @@ export async function updateTestimonial(req, res) {
 
 		res.send({
 			status: 204,
+			message: 'testimonial updated successfully',
 			data: updatedTestimonial,
 		});
 	} catch (err) {
 		res.send({
-			status: 500,
-			message: 'internal server error',
+			status: 400,
+			message: 'invalid id',
+		});
+	}
+}
+
+/* --------------------------- delete testimonial --------------------------- */
+
+export async function deleteTestimonial(req, res) {
+	try {
+		const { id } = req.params;
+
+		const deletedTestimonial = await testimonialModel.findByIdAndDelete(id);
+
+		res.send({
+			status: 204,
+			message: 'testimonial deleted successfully',
+			data: deletedTestimonial,
+		});
+	} catch (err) {
+		res.send({
+			status: 400,
+			message: 'invalid id',
 		});
 	}
 }
