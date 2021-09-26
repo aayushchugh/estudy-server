@@ -3,6 +3,8 @@ import bcrypt from 'bcrypt';
 
 import userModel from '../models/userModel.js';
 
+/* --------------------------------- signup --------------------------------- */
+
 export async function postUser(req, res) {
 	try {
 		// hash password
@@ -28,6 +30,8 @@ export async function postUser(req, res) {
 		res.json({ status: 400, message: 'Duplicate email' });
 	}
 }
+
+/* ---------------------------------- login --------------------------------- */
 
 export async function postLogin(req, res) {
 	// check if user exists
