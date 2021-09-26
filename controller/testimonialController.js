@@ -68,3 +68,27 @@ export async function getSingleTestimonial(req, res) {
 		});
 	}
 }
+
+/* --------------------------- update testimonial -------------------------- */
+export async function updateTestimonial(req, res) {
+	try {
+		const { name, content, rating } = req.body;
+		const { id } = req.params;
+
+		const updatedTestimonial = await testimonialModel.findByIdAndUpdate(
+			id,
+			{ name: name, content: content, rating: rating },
+			{ new: true }
+		);
+
+		res.send({
+			status: 204,
+			data: updatedTestimonial,
+		});
+	} catch (err) {
+		res.send({
+			status: 500,
+			message: 'internal server error',
+		});
+	}
+}
