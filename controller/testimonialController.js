@@ -6,6 +6,13 @@ export async function postNewTestimonial(req, res) {
 	try {
 		const { name, content, rating } = req.body;
 
+		if (rating > 5 || rating < 0) {
+			return res.send({
+				status: 400,
+				message: 'Rating must be between 0 and 5',
+			});
+		}
+
 		const newTestimonial = await testimonialModel.create({
 			name: name,
 			content: content,
