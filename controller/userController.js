@@ -1,11 +1,11 @@
-import userModel from '../models/userModel.js';
+const User = require('../models/userModel');
 
 /* ------------------------------ get all users ----------------------------- */
 
-export async function getAllUsers(req, res) {
+exports.getAllUsers = async function (req, res) {
 	try {
 		// get all users
-		const users = await userModel.find();
+		const users = await User.find();
 
 		// send data
 		res.send({
@@ -18,16 +18,16 @@ export async function getAllUsers(req, res) {
 			message: 'internal server error',
 		});
 	}
-}
+};
 
 /* ------------------------------- delete user ------------------------------ */
 
-export async function deleteUser(req, res) {
+exports.deleteUser = async function (req, res) {
 	try {
 		const { id } = req.params;
 
 		// delete user
-		const deleteUser = await userModel.findByIdAndDelete(id);
+		const deleteUser = await User.findByIdAndDelete(id);
 
 		// send data
 		res.send({
@@ -41,4 +41,4 @@ export async function deleteUser(req, res) {
 			message: 'invalid id',
 		});
 	}
-}
+};

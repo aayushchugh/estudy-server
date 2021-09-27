@@ -1,18 +1,18 @@
-import { default as jwt } from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
-import userModel from '../models/userModel.js';
+const User = require('../models/userModel.js');
 
 /* --------------------------------- signup --------------------------------- */
 
-export async function postUser(req, res) {
+exports.postUser = async function (req, res) {
 	try {
 		// hash password
 		const salt = await bcrypt.genSalt(10);
 		const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
 		// create new user
-		const user = await userModel.create({
+		const user = await User.create({
 			name: req.body.name,
 			email: req.body.email,
 			password: hashedPassword,
@@ -27,13 +27,13 @@ export async function postUser(req, res) {
 	} catch (err) {
 		res.json({ status: 400, message: 'Duplicate email' });
 	}
-}
+};
 
 /* ---------------------------------- login --------------------------------- */
 
-export async function postLogin(req, res) {
+exports.postLogin = async function (req, res) {
 	// check if user exists
-	const user = await userModel.findOne({
+	const user = await User.findOne({
 		email: req.body.email,
 	});
 
@@ -73,4 +73,4 @@ export async function postLogin(req, res) {
 			message: 'user not found',
 		});
 	}
-}
+};

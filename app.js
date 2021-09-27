@@ -1,11 +1,11 @@
-import express from 'express';
-import bodyParser from 'body-parser';
-import cors from 'cors';
+const express = require('express');
+const cors = require('cors');
+const bodyParser = require('body-parser');
 
-import { default as authRouter } from './routes/authRouter.js';
-import { default as userRouter } from './routes/userRouter.js';
-import { default as testimonialRouter } from './routes/testimonialRouter.js';
-import { default as updateEmailListRouter } from './routes/updateEmailListRouter.js';
+const authRouter = require('./routes/authRouter.js');
+const userRouter = require('./routes/userRouter.js');
+const testimonialRouter = require('./routes/testimonialRouter.js');
+const updateEmailListRouter = require('./routes/updateEmailListRouter.js');
 
 const app = express();
 
@@ -21,4 +21,4 @@ app.use('/v1', userRouter);
 app.use('/v1', testimonialRouter);
 app.use('/v1', updateEmailListRouter);
 
-export default app;
+module.exports = app;

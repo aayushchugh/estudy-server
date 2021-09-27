@@ -1,8 +1,8 @@
-import testimonialModel from '../models/testimonialModel.js';
+const Testimonial = require('../models/testimonialModel.js');
 
 /* --------------------------- add new testimonial -------------------------- */
 
-export async function postNewTestimonial(req, res) {
+exports.postNewTestimonial = async function (req, res) {
 	try {
 		const { name, content, rating } = req.body;
 
@@ -15,7 +15,7 @@ export async function postNewTestimonial(req, res) {
 		}
 
 		// create new testimonial
-		const newTestimonial = await testimonialModel.create({
+		const newTestimonial = await Testimonial.create({
 			name: name,
 			content: content,
 			rating: rating,
@@ -33,14 +33,14 @@ export async function postNewTestimonial(req, res) {
 			message: 'internal server error',
 		});
 	}
-}
+};
 
 /* -------------------------- get all testimonials -------------------------- */
 
-export async function getAllTestimonials(req, res) {
+exports.getAllTestimonials = async function (req, res) {
 	try {
 		// get all testimonials
-		const testimonials = await testimonialModel.find();
+		const testimonials = await Testimonial.find();
 
 		// send data
 		res.send({
@@ -53,16 +53,16 @@ export async function getAllTestimonials(req, res) {
 			message: 'internal server error',
 		});
 	}
-}
+};
 
 /* ------------------------- get single testimonial ------------------------- */
 
-export async function getSingleTestimonial(req, res) {
+exports.getSingleTestimonial = async function (req, res) {
 	try {
 		const { id } = req.params;
 
 		// find testimonial by id
-		const testimonial = await testimonialModel.findById(id);
+		const testimonial = await Testimonial.findById(id);
 
 		// send data
 		res.send({
@@ -75,11 +75,11 @@ export async function getSingleTestimonial(req, res) {
 			message: 'invalid id',
 		});
 	}
-}
+};
 
 /* --------------------------- update testimonial -------------------------- */
 
-export async function patchTestimonial(req, res) {
+exports.patchTestimonial = async function (req, res) {
 	try {
 		const { name, content, rating } = req.body;
 		const { id } = req.params;
@@ -93,7 +93,7 @@ export async function patchTestimonial(req, res) {
 		}
 
 		// update testimonial
-		const updatedTestimonial = await testimonialModel.findByIdAndUpdate(
+		const updatedTestimonial = await Testimonial.findByIdAndUpdate(
 			id,
 			{ name: name, content: content, rating: rating },
 			{ new: true }
@@ -111,16 +111,16 @@ export async function patchTestimonial(req, res) {
 			message: 'invalid id',
 		});
 	}
-}
+};
 
 /* --------------------------- delete testimonial --------------------------- */
 
-export async function deleteTestimonial(req, res) {
+exports.deleteTestimonial = async function (req, res) {
 	try {
 		const { id } = req.params;
 
 		// delete testimonial
-		const deletedTestimonial = await testimonialModel.findByIdAndDelete(id);
+		const deletedTestimonial = await Testimonial.findByIdAndDelete(id);
 
 		// send data
 		res.send({
@@ -134,4 +134,4 @@ export async function deleteTestimonial(req, res) {
 			message: 'invalid id',
 		});
 	}
-}
+};

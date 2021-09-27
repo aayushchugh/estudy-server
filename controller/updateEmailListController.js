@@ -1,13 +1,14 @@
-import { default as emailListModel } from '../models/updateEmailListModel.js';
+const EmailList = require('../models/updateEmailListModel');
+const mailchimp = require('@mailchimp/mailchimp_marketing');
 
 /* ------------------------------ add new email ----------------------------- */
 
-export async function postNewEmail(req, res) {
+exports.postNewEmail = async function (req, res) {
 	try {
 		const { name, email, class: userClass } = req.body;
 
 		// find existing email
-		const existingEmail = await emailListModel.findOne({ email: email });
+		const existingEmail = await EmailList.findOne({ email: email });
 
 		// if email exists, send error
 		if (existingEmail) {
@@ -16,19 +17,39 @@ export async function postNewEmail(req, res) {
 				message: 'Email already exists',
 			});
 		} else {
-			// add new email to DB
-			const newEmail = await emailListModel.create({
-				name: name,
-				email: email,
-				class: userClass,
+			mailchimp.setConfig({
+				apiKey: process.env.MAILCHIMP_API_KEY,
+				server: process.env.MAILCHIMP_SERVER,
 			});
 
-			// send data
-			res.send({
-				status: 201,
-				message: 'Email added successfully',
-				data: newEmail,
-			});
+			const mailChimpRes = await mailchimp.lists.addListMember(
+				process.env.MAILCHIMP_LIST_ID,
+				{
+					email_address: email,
+					status: 'subscribed',
+					merge_fields: {
+						NAME: name,
+						CLASS: Number(userClass),
+					},
+				}
+			);
+
+			if (mailChimpRes) {
+				// add new email to DB
+				const newEmail = await EmailList.create({
+					name: name,
+					email: email,
+					class: userClass,
+					mailchimp_id: mailChimpRes.id,
+				});
+
+				// send data
+				res.send({
+					status: 201,
+					message: 'Email added successfully',
+					data: newEmail,
+				});
+			}
 		}
 	} catch (err) {
 		res.send({
@@ -36,4 +57,4 @@ export async function postNewEmail(req, res) {
 			message: 'Internal server error',
 		});
 	}
-}
+};

@@ -1,8 +1,11 @@
-import { Router } from 'express';
-import { postNewEmail } from '../controller/updateEmailListController.js';
+const express = require('express');
 
-const router = Router();
+const updateEmailListController = require('../controller/updateEmailListController');
 
-router.route('/updateEmailList/add').post(postNewEmail);
+const router = express.Router();
 
-export default router;
+router
+	.route('/updateEmailList/add')
+	.post(updateEmailListController.postNewEmail);
+
+module.exports = router;

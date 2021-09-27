@@ -4,8 +4,8 @@
 	"description": "A place where you can get all the notes you want for your class",
 	"main": "server.js",
 	"license": "MIT",
-	"type": "module",
 	"dependencies": {
+		"@mailchimp/mailchimp_marketing": "^3.0.66",
 		"bcrypt": "^5.0.1",
 		"body-parser": "^1.19.0",
 		"cors": "^2.8.5",
