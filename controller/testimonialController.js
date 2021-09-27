@@ -6,6 +6,7 @@ export async function postNewTestimonial(req, res) {
 	try {
 		const { name, content, rating } = req.body;
 
+		// check if rating > 5 or < 0 than send error
 		if (rating > 5 || rating < 0) {
 			return res.send({
 				status: 400,
@@ -13,12 +14,14 @@ export async function postNewTestimonial(req, res) {
 			});
 		}
 
+		// create new testimonial
 		const newTestimonial = await testimonialModel.create({
 			name: name,
 			content: content,
 			rating: rating,
 		});
 
+		// send data
 		res.send({
 			status: 201,
 			message: 'testimonial created successfully',
@@ -36,8 +39,10 @@ export async function postNewTestimonial(req, res) {
 
 export async function getAllTestimonials(req, res) {
 	try {
+		// get all testimonials
 		const testimonials = await testimonialModel.find();
 
+		// send data
 		res.send({
 			status: 200,
 			data: testimonials,
@@ -56,8 +61,10 @@ export async function getSingleTestimonial(req, res) {
 	try {
 		const { id } = req.params;
 
+		// find testimonial by id
 		const testimonial = await testimonialModel.findById(id);
 
+		// send data
 		res.send({
 			status: 200,
 			data: testimonial,
@@ -77,6 +84,7 @@ export async function patchTestimonial(req, res) {
 		const { name, content, rating } = req.body;
 		const { id } = req.params;
 
+		// check if rating > 5 or < 0 than send error
 		if (rating > 5 || rating < 0) {
 			return res.send({
 				status: 400,
@@ -84,12 +92,14 @@ export async function patchTestimonial(req, res) {
 			});
 		}
 
+		// update testimonial
 		const updatedTestimonial = await testimonialModel.findByIdAndUpdate(
 			id,
 			{ name: name, content: content, rating: rating },
 			{ new: true }
 		);
 
+		// send data
 		res.send({
 			status: 204,
 			message: 'testimonial updated successfully',
@@ -109,8 +119,10 @@ export async function deleteTestimonial(req, res) {
 	try {
 		const { id } = req.params;
 
+		// delete testimonial
 		const deletedTestimonial = await testimonialModel.findByIdAndDelete(id);
 
+		// send data
 		res.send({
 			status: 204,
 			message: 'testimonial deleted successfully',

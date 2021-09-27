@@ -18,6 +18,7 @@ export async function postUser(req, res) {
 			password: hashedPassword,
 		});
 
+		// send data
 		res.json({
 			status: 201,
 			message: 'successfully created new user',
@@ -53,6 +54,7 @@ export async function postLogin(req, res) {
 				process.env.AUTH_SECRET
 			);
 
+			// send data
 			return res.json({
 				status: 200,
 				message: 'logged in successfully',

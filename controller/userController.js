@@ -4,8 +4,10 @@ import userModel from '../models/userModel.js';
 
 export async function getAllUsers(req, res) {
 	try {
+		// get all users
 		const users = await userModel.find();
 
+		// send data
 		res.send({
 			status: 200,
 			data: users,
@@ -23,11 +25,15 @@ export async function getAllUsers(req, res) {
 export async function deleteUser(req, res) {
 	try {
 		const { id } = req.params;
-		await userModel.findByIdAndDelete(id);
 
+		// delete user
+		const deleteUser = await userModel.findByIdAndDelete(id);
+
+		// send data
 		res.send({
 			status: 200,
 			message: 'user deleted successfully',
+			data: deleteUser,
 		});
 	} catch (err) {
 		res.send({
