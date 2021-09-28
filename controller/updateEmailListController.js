@@ -2,6 +2,23 @@ const md5 = require('md5');
 const mailchimp = require('@mailchimp/mailchimp_marketing');
 const EmailList = require('../models/updateEmailListModel');
 
+/* ----------------------------- get all emails ----------------------------- */
+exports.getAllEmails = async function (req, res) {
+	try {
+		const allEmails = await EmailList.find();
+
+		res.send({
+			status: 200,
+			data: allEmails,
+		});
+	} catch (err) {
+		res.send({
+			status: 500,
+			message: 'internal server error',
+		});
+	}
+};
+
 /* ------------------------------ add new email ----------------------------- */
 
 exports.postNewEmail = async function (req, res) {
@@ -51,7 +68,7 @@ exports.postNewEmail = async function (req, res) {
 	} catch (err) {
 		res.send({
 			status: 400,
-			message: 'email looks fake',
+			message: 'Email looks fake',
 		});
 	}
 };
