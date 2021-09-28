@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const mailchimp = require('@mailchimp/mailchimp_marketing');
 
 const authRouter = require('./routes/authRouter.js');
 const userRouter = require('./routes/userRouter.js');
@@ -13,6 +14,11 @@ const app = express();
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
+
+mailchimp.setConfig({
+	apiKey: process.env.MAILCHIMP_API_KEY,
+	server: process.env.MAILCHIMP_SERVER,
+});
 
 /* --------------------------------- routes --------------------------------- */
 

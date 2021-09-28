@@ -8,4 +8,8 @@ router
 	.route('/updateEmailList/add')
 	.post(updateEmailListController.postNewEmail);
 
+router
+	.route('/updateEmailList/unsubscribe')
+	.post(updateEmailListController.unSubscribeEmail);
+
 module.exports = router;
