@@ -2,23 +2,6 @@ const md5 = require('md5');
 const mailchimp = require('@mailchimp/mailchimp_marketing');
 const EmailList = require('../models/updateEmailListModel');
 
-/* ----------------------------- get all emails ----------------------------- */
-exports.getAllEmails = async function (req, res) {
-	try {
-		const allEmails = await EmailList.find();
-
-		res.send({
-			status: 200,
-			data: allEmails,
-		});
-	} catch (err) {
-		res.send({
-			status: 500,
-			message: 'internal server error',
-		});
-	}
-};
-
 /* ------------------------------ add new email ----------------------------- */
 
 exports.postNewEmail = async function (req, res) {
@@ -73,6 +56,25 @@ exports.postNewEmail = async function (req, res) {
 	}
 };
 
+/* ----------------------------- get all emails ----------------------------- */
+exports.getAllEmails = async function (req, res) {
+	try {
+		// get all emails from DB
+		const allEmails = await EmailList.find();
+
+		// send data
+		res.send({
+			status: 200,
+			data: allEmails,
+		});
+	} catch (err) {
+		res.send({
+			status: 500,
+			message: 'internal server error',
+		});
+	}
+};
+
 /* ------------------------- remove email from list ------------------------- */
 exports.unSubscribeEmail = async function (req, res) {
 	const { email } = req.body;
@@ -87,6 +89,7 @@ exports.unSubscribeEmail = async function (req, res) {
 		}
 	);
 
+	// send data
 	res.send({
 		status: 200,
 		message: 'Email unsubscribed successfully',

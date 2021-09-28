@@ -5,12 +5,12 @@ const updateEmailListController = require('../controller/updateEmailListControll
 const router = express.Router();
 
 router
-	.route('/updateEmailList/get-all')
-	.get(updateEmailListController.getAllEmails);
-
-router
 	.route('/updateEmailList/add')
 	.post(updateEmailListController.postNewEmail);
+
+router
+	.route('/updateEmailList/get-all')
+	.get(updateEmailListController.getAllEmails);
 
 router
 	.route('/updateEmailList/unsubscribe')
