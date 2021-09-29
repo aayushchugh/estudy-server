@@ -136,8 +136,7 @@ exports.patchContact = async function (req, res) {
 
 exports.deleteContact = async function (req, res) {
 	try {
-		const { id } = req.body;
-
+		const { id } = req.params;
 		const contact = await ContactUs.findByIdAndDelete(id);
 
 		if (!contact) {

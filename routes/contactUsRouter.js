@@ -13,6 +13,8 @@ router
 
 router.route('/contact-us/update').patch(contactUsController.patchContact);
 
-router.route('/contact-us/delete').delete(contactUsController.deleteContact);
+router
+	.route('/contact-us/delete/:id')
+	.delete(contactUsController.deleteContact);
 
 module.exports = router;
