@@ -49,6 +49,7 @@ exports.postLogin = async function (req, res) {
 			// generate token
 			const token = jwt.sign(
 				{
+					id: user._id,
 					name: user.name,
 					email: user.email,
 					class: user.class,

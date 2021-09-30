@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/userModel');
+const jwt = require('jsonwebtoken');
 
 /* ------------------------------ get all users ----------------------------- */
 
@@ -26,7 +27,7 @@ exports.getAllUsers = async function (req, res) {
 exports.patchUser = async function (req, res) {
 	try {
 		const { id } = req.params;
-		const { name, existingPassword, updatePassword, userClass } = req.body;
+		const { name, userClass, userPassword, updatePassword } = req.body;
 
 		const user = await User.findById(id);
 
@@ -40,7 +41,7 @@ exports.patchUser = async function (req, res) {
 
 		// check if password is correct
 		const doPasswordMatch = await bcrypt.compare(
-			existingPassword,
+			userPassword,
 			user.password
 		);
 
@@ -53,22 +54,62 @@ exports.patchUser = async function (req, res) {
 
 		// validate class
 		if (userClass === '9' || userClass === '10' || userClass === '11') {
-			// hash password
-			const salt = await bcrypt.genSalt(10);
-			const hashedPassword = await bcrypt.hash(updatePassword, salt);
+			// if reset password is not undefined
+			if (updatePassword !== undefined) {
+				// hash password
+				const salt = await bcrypt.genSalt(10);
+				const hashedPassword = await bcrypt.hash(updatePassword, salt);
 
-			// update user
-			const updatedUser = await User.findByIdAndUpdate(id, {
-				name: name,
-				password: hashedPassword,
-				class: userClass,
-			});
+				// update user
+				const updatedUser = await User.findByIdAndUpdate(id, {
+					name: name,
+					password: hashedPassword,
+					class: userClass,
+				});
 
-			res.send({
-				status: 204,
-				message: 'successfully updated user',
-				data: updatedUser,
-			});
+				// generate jwt token
+				const token = jwt.sign(
+					{
+						id: user._id,
+						name: name,
+						email: user.email,
+						class: userClass,
+					},
+					process.env.AUTH_SECRET
+				);
+
+				return res.send({
+					status: 204,
+					message: 'successfully updated user',
+					data: updatedUser,
+					token: token,
+				});
+			} else {
+				// update user
+				const updatedUser = await User.findByIdAndUpdate(id, {
+					name: name,
+					password: user.password,
+					class: userClass,
+				});
+
+				// generate jwt token
+				const token = jwt.sign(
+					{
+						id: user._id,
+						name: name,
+						email: user.email,
+						class: userClass,
+					},
+					process.env.AUTH_SECRET
+				);
+
+				return res.send({
+					status: 204,
+					message: 'successfully updated user',
+					data: updatedUser,
+					token: token,
+				});
+			}
 		} else {
 			res.send({
 				status: 400,
