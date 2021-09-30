@@ -67,6 +67,7 @@ exports.getSingleContact = async function (req, res) {
 
 		const contact = await ContactUs.findById(id);
 
+		// check if contact exist
 		if (!contact) {
 			return res.send({
 				status: 400,
@@ -74,6 +75,7 @@ exports.getSingleContact = async function (req, res) {
 			});
 		}
 
+		// send data
 		res.send({
 			status: 200,
 			data: contact,
@@ -113,12 +115,14 @@ exports.patchContact = async function (req, res) {
 				status: status,
 			});
 
+			// send data
 			res.send({
 				status: 204,
 				message: 'status updated successfully',
 				data: updatedContact,
 			});
 		} else {
+			// send data
 			res.send({
 				status: 400,
 				message: 'invalid status',
@@ -139,6 +143,7 @@ exports.deleteContact = async function (req, res) {
 		const { id } = req.params;
 		const contact = await ContactUs.findByIdAndDelete(id);
 
+		// check if contact exists
 		if (!contact) {
 			return res.send({
 				status: 400,
@@ -146,6 +151,7 @@ exports.deleteContact = async function (req, res) {
 			});
 		}
 
+		// send data
 		res.send({
 			status: 204,
 			message: 'contact deleted successfully',
