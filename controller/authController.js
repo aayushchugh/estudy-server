@@ -15,6 +15,7 @@ exports.postUser = async function (req, res) {
 		const user = await User.create({
 			name: req.body.name,
 			email: req.body.email,
+			class: 'undefined',
 			password: hashedPassword,
 		});
 
@@ -50,6 +51,7 @@ exports.postLogin = async function (req, res) {
 				{
 					name: user.name,
 					email: user.email,
+					class: user.class,
 				},
 				process.env.AUTH_SECRET
 			);
