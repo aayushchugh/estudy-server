@@ -6,6 +6,14 @@ exports.postNewTestimonial = async function (req, res) {
 	try {
 		const { name, content, rating } = req.body;
 
+		// validate input
+		if (!name || !content || !rating) {
+			return res.send({
+				status: 400,
+				message: 'name, content, rating are required',
+			});
+		}
+
 		// check if rating > 5 or < 0 than send error
 		if (rating > 5 || rating < 0) {
 			return res.send({
@@ -83,6 +91,14 @@ exports.patchTestimonial = async function (req, res) {
 	try {
 		const { name, content, rating } = req.body;
 		const { id } = req.params;
+
+		// validate input
+		if (!name || !content || !rating) {
+			return res.send({
+				status: 400,
+				message: 'name, content, rating are required',
+			});
+		}
 
 		// check if rating > 5 or < 0 than send error
 		if (rating > 5 || rating < 0) {

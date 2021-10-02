@@ -7,7 +7,7 @@ exports.postNewSubject = async function (req, res) {
 
 		// validate input
 		if (!title || !classFromUser) {
-			res.send({
+			return res.send({
 				status: 400,
 				message: 'Both title and class are required',
 			});

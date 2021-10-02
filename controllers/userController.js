@@ -29,6 +29,15 @@ exports.patchUser = async function (req, res) {
 		const { id } = req.params;
 		const { name, userClass, userPassword, updatePassword } = req.body;
 
+		// validate user input
+		if (!name || !userClass || !userPassword || !updatePassword) {
+			return res.send({
+				status: 400,
+				message:
+					'name, userClass, userPassword, updatePassword are required',
+			});
+		}
+
 		const user = await User.findById(id);
 
 		// check if user exists

@@ -6,6 +6,14 @@ exports.postContact = async function (req, res) {
 	try {
 		const { name, email, subject, message } = req.body;
 
+		// validate input
+		if (!name || !email || !subject || !message) {
+			return res.send({
+				status: 400,
+				message: 'name, email, subject, message all are required',
+			});
+		}
+
 		// check if email already exist
 		const existingEmail = await ContactUs.findOne({ email: email });
 
@@ -93,6 +101,14 @@ exports.getSingleContact = async function (req, res) {
 exports.patchContact = async function (req, res) {
 	try {
 		const { id, status } = req.body;
+
+		// validate input
+		if (!id || !status) {
+			return res.send({
+				status: 400,
+				message: 'id and status are required',
+			});
+		}
 
 		// check if status is valid
 		if (

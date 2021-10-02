@@ -8,6 +8,14 @@ exports.postNewEmail = async function (req, res) {
 	try {
 		const { name, email, class: userClass } = req.body;
 
+		// validate input
+		if (!name || !email || !userClass) {
+			return res.send({
+				status: 404,
+				message: 'Please enter all fields',
+			});
+		}
+
 		// find existing email
 		const existingEmail = await EmailList.findOne({ email: email });
 
@@ -78,6 +86,16 @@ exports.getAllEmails = async function (req, res) {
 /* ------------------------- remove email from list ------------------------- */
 exports.unSubscribeEmail = async function (req, res) {
 	const { email } = req.body;
+
+	// validate input
+	if (!email) {
+		return res.send({
+			status: 400,
+			message: 'Please enter email',
+		});
+	}
+
+	// hash email
 	const subscriberHash = md5(email.toLowerCase());
 
 	// unsubscribe email from mailchimp list

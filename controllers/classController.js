@@ -7,6 +7,14 @@ exports.postNewClass = async function (req, res) {
 		// get data from user
 		const { title, description } = req.body;
 
+		// validate input
+		if (!title || !description) {
+			return res.send({
+				status: 400,
+				message: 'both title and description are required',
+			});
+		}
+
 		// check for existing class
 		const existingClass = await Class.findOne({ title: title });
 
@@ -94,6 +102,14 @@ exports.patchClass = async function (req, res) {
 
 		// get data from user
 		const { title, description } = req.body;
+
+		// validate input
+		if (!title || !description) {
+			return res.send({
+				status: 400,
+				message: 'both title and description are required',
+			});
+		}
 
 		// update class
 		const updatedClass = await Class.findByIdAndUpdate(
