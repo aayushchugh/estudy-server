@@ -46,3 +46,25 @@ exports.getAllClasses = async function (req, res) {
 		});
 	}
 };
+
+/* ---------------------------- get single class ---------------------------- */
+exports.getSingleClass = async function (req, res) {
+	try {
+		// get class id
+		const { id } = req.params;
+
+		// get class
+		const classInfo = await Class.findById(id);
+
+		// send response
+		res.send({
+			status: 200,
+			data: classInfo,
+		});
+	} catch (err) {
+		res.send({
+			status: 500,
+			message: 'internal server error',
+		});
+	}
+};
