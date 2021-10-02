@@ -56,6 +56,13 @@ exports.getSingleClass = async function (req, res) {
 		// get class
 		const classInfo = await Class.findById(id);
 
+		if (!classInfo) {
+			return res.send({
+				status: 400,
+				message: 'class not found, check id',
+			});
+		}
+
 		// send response
 		res.send({
 			status: 200,
@@ -63,8 +70,48 @@ exports.getSingleClass = async function (req, res) {
 		});
 	} catch (err) {
 		res.send({
-			status: 500,
-			message: 'internal server error',
+			status: 400,
+			message: 'invalid id',
+		});
+	}
+};
+
+/* ------------------------------ update class ------------------------------ */
+exports.patchClass = async function (req, res) {
+	try {
+		// get class id
+		const { id } = req.params;
+
+		// get data from user
+		const { title, description } = req.body;
+
+		// update class
+		const updatedClass = await Class.findByIdAndUpdate(
+			id,
+			{
+				title: title,
+				description: description,
+			},
+			{ new: true }
+		);
+
+		// check if class exists
+		if (!updatedClass) {
+			return res.send({
+				status: 400,
+				message: 'class not found, check id',
+			});
+		}
+
+		// send data
+		res.send({
+			status: 200,
+			data: updatedClass,
+		});
+	} catch (err) {
+		res.send({
+			status: 400,
+			message: 'invalid id',
 		});
 	}
 };
