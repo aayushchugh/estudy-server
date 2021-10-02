@@ -105,8 +105,38 @@ exports.patchClass = async function (req, res) {
 
 		// send data
 		res.send({
-			status: 200,
+			status: 204,
 			data: updatedClass,
+		});
+	} catch (err) {
+		res.send({
+			status: 400,
+			message: 'invalid id',
+		});
+	}
+};
+
+/* ------------------------------ delete class ------------------------------ */
+exports.deleteClass = async function (req, res) {
+	try {
+		// get class id
+		const { id } = req.params;
+
+		// delete class
+		const deletedClass = await Class.findByIdAndDelete(id);
+
+		// check if class exists
+		if (!deletedClass) {
+			return res.send({
+				status: 400,
+				message: 'class not found, check id',
+			});
+		}
+
+		// send data
+		res.send({
+			status: 204,
+			data: deletedClass,
 		});
 	} catch (err) {
 		res.send({
