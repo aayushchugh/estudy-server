@@ -7,6 +7,16 @@ exports.postNewClass = async function (req, res) {
 		// get data from user
 		const { title, description } = req.body;
 
+		// check for existing class
+		const existingClass = await Class.findOne({ title: title });
+
+		if (existingClass) {
+			return res.send({
+				status: 400,
+				message: 'class already exists',
+			});
+		}
+
 		// create new class
 		const newClass = await Class.create({
 			title: title,
@@ -32,7 +42,7 @@ exports.postNewClass = async function (req, res) {
 exports.getAllClasses = async function (req, res) {
 	try {
 		// get all classes
-		const classes = await Class.find();
+		const classes = await Class.find().populate('subjects');
 
 		// send response
 		res.send({
@@ -54,7 +64,7 @@ exports.getSingleClass = async function (req, res) {
 		const { id } = req.params;
 
 		// get class
-		const classInfo = await Class.findById(id);
+		const classInfo = await Class.findById(id).populate('subjects');
 
 		if (!classInfo) {
 			return res.send({
@@ -93,7 +103,7 @@ exports.patchClass = async function (req, res) {
 				description: description,
 			},
 			{ new: true }
-		);
+		).populate('subjects');
 
 		// check if class exists
 		if (!updatedClass) {
@@ -123,7 +133,9 @@ exports.deleteClass = async function (req, res) {
 		const { id } = req.params;
 
 		// delete class
-		const deletedClass = await Class.findByIdAndDelete(id);
+		const deletedClass = await Class.findByIdAndDelete(id).populate(
+			'subjects'
+		);
 
 		// check if class exists
 		if (!deletedClass) {
