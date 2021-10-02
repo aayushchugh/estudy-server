@@ -117,7 +117,7 @@ exports.patchTestimonial = async function (req, res) {
 
 		// send data
 		res.send({
-			status: 204,
+			status: 200,
 			message: 'testimonial updated successfully',
 			data: updatedTestimonial,
 		});
@@ -140,7 +140,7 @@ exports.deleteTestimonial = async function (req, res) {
 
 		// send data
 		res.send({
-			status: 204,
+			status: 200,
 			message: 'testimonial deleted successfully',
 			data: deletedTestimonial,
 		});

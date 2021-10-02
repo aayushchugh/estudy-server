@@ -51,7 +51,7 @@ exports.postNewSubject = async function (req, res) {
 
 		// send response
 		res.send({
-			status: 204,
+			status: 201,
 			message: 'Subject created successfully',
 			data: { subject: newSubject, class: classFromDb },
 		});

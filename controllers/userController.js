@@ -88,7 +88,7 @@ exports.patchUser = async function (req, res) {
 				);
 
 				return res.send({
-					status: 204,
+					status: 200,
 					message: 'successfully updated user',
 					data: updatedUser,
 					token: token,
@@ -113,7 +113,7 @@ exports.patchUser = async function (req, res) {
 				);
 
 				return res.send({
-					status: 204,
+					status: 200,
 					message: 'successfully updated user',
 					data: updatedUser,
 					token: token,

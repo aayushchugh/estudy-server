@@ -34,7 +34,7 @@ exports.postNewClass = async function (req, res) {
 
 		// send response
 		res.send({
-			status: 204,
+			status: 201,
 			message: 'Class created successfully',
 			data: newClass,
 		});
@@ -131,7 +131,7 @@ exports.patchClass = async function (req, res) {
 
 		// send data
 		res.send({
-			status: 204,
+			status: 200,
 			data: updatedClass,
 		});
 	} catch (err) {
@@ -163,7 +163,7 @@ exports.deleteClass = async function (req, res) {
 
 		// send data
 		res.send({
-			status: 204,
+			status: 200,
 			data: deletedClass,
 		});
 	} catch (err) {

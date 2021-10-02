@@ -35,7 +35,7 @@ exports.postContact = async function (req, res) {
 
 		// send data
 		res.send({
-			status: 204,
+			status: 201,
 			message: 'Your message has been added successfully',
 			data: newContact,
 		});
@@ -133,7 +133,7 @@ exports.patchContact = async function (req, res) {
 
 			// send data
 			res.send({
-				status: 204,
+				status: 200,
 				message: 'status updated successfully',
 				data: updatedContact,
 			});
@@ -169,7 +169,7 @@ exports.deleteContact = async function (req, res) {
 
 		// send data
 		res.send({
-			status: 204,
+			status: 200,
 			message: 'contact deleted successfully',
 			data: contact,
 		});
