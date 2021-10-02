@@ -1,6 +1,6 @@
 const express = require('express');
 
-const updateEmailListController = require('../controller/updateEmailListController');
+const updateEmailListController = require('../controllers/updateEmailListController');
 
 const router = express.Router();
 

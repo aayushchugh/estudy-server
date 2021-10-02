@@ -8,6 +8,7 @@ const userRouter = require('./routes/userRouter.js');
 const testimonialRouter = require('./routes/testimonialRouter.js');
 const updateEmailListRouter = require('./routes/updateEmailListRouter.js');
 const contactUsRouter = require('./routes/contactUsRouter');
+const classRouter = require('./routes/classRouter');
 
 const app = express();
 
@@ -30,5 +31,6 @@ app.use('/v1', userRouter);
 app.use('/v1', testimonialRouter);
 app.use('/v1', updateEmailListRouter);
 app.use('/v1', contactUsRouter);
+app.use('/v1', classRouter);
 
 module.exports = app;

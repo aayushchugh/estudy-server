@@ -1,6 +1,6 @@
 const express = require('express');
 
-const testimonialController = require('../controller/testimonialController');
+const testimonialController = require('../controllers/testimonialController');
 
 const router = express.Router();
 
