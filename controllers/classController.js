@@ -111,6 +111,16 @@ exports.patchClass = async function (req, res) {
 			});
 		}
 
+		// check if class with same title exists
+		const classWithSameTitle = await Class.findOne({ title: title });
+
+		if (classWithSameTitle) {
+			return res.send({
+				status: 400,
+				message: 'class with same title already exists',
+			});
+		}
+
 		// update class
 		const updatedClass = await Class.findByIdAndUpdate(
 			id,

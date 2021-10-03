@@ -111,3 +111,59 @@ exports.getSingleSubject = async function (req, res) {
 		});
 	}
 };
+
+/* ----------------------------- update subject ----------------------------- */
+exports.patchSubject = async function (req, res) {
+	try {
+		const { id } = req.params;
+		const { title } = req.body;
+
+		// validate input
+		if (!title) {
+			return res.send({
+				status: 400,
+				message: 'title is required',
+			});
+		}
+
+		// check if subject with same title exits already
+
+		const subjectWithSameTitle = await Subject.findOne({ title: title });
+
+		if (subjectWithSameTitle) {
+			return res.send({
+				status: 400,
+				message: 'subject with same title already exists',
+			});
+		}
+
+		// get subject from db
+		const updatedSubject = await Subject.findByIdAndUpdate(
+			id,
+			{
+				title: title,
+			},
+			{ new: true }
+		);
+
+		// check if subject exists
+		if (!updatedSubject) {
+			return res.send({
+				status: 400,
+				message: 'subject not found invalid id',
+			});
+		}
+
+		// send response
+		res.send({
+			status: 200,
+			message: 'subject updated successfully',
+			data: updatedSubject,
+		});
+	} catch (err) {
+		res.send({
+			status: 500,
+			message: 'internal server error',
+		});
+	}
+};

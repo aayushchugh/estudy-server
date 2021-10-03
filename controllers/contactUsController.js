@@ -127,9 +127,13 @@ exports.patchContact = async function (req, res) {
 			}
 
 			// update status
-			const updatedContact = await ContactUs.findByIdAndUpdate(id, {
-				status: status,
-			});
+			const updatedContact = await ContactUs.findByIdAndUpdate(
+				id,
+				{
+					status: status,
+				},
+				{ new: true }
+			);
 
 			// send data
 			res.send({

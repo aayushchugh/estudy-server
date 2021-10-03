@@ -100,6 +100,18 @@ exports.patchTestimonial = async function (req, res) {
 			});
 		}
 
+		// check if testimonial with same name already exists
+		const testimonialWithSameName = await Testimonial.findOne({
+			name: name,
+		});
+
+		if (testimonialWithSameName) {
+			return res.send({
+				status: 400,
+				message: 'testimonial with same name already exists',
+			});
+		}
+
 		// check if rating > 5 or < 0 than send error
 		if (rating > 5 || rating < 0) {
 			return res.send({

@@ -70,11 +70,15 @@ exports.patchUser = async function (req, res) {
 				const hashedPassword = await bcrypt.hash(updatePassword, salt);
 
 				// update user
-				const updatedUser = await User.findByIdAndUpdate(id, {
-					name: name,
-					password: hashedPassword,
-					class: userClass,
-				});
+				const updatedUser = await User.findByIdAndUpdate(
+					id,
+					{
+						name: name,
+						password: hashedPassword,
+						class: userClass,
+					},
+					{ new: true }
+				);
 
 				// generate jwt token
 				const token = jwt.sign(
