@@ -40,6 +40,8 @@ exports.postNewSubject = async function (req, res) {
 		// create new subject
 		const newSubject = await Subject.create({
 			title: title,
+			classId: classFromDb._id,
+			classTitle: classFromDb.title,
 			notes: [],
 			pyqs: [],
 			ncertSolutions: [],
@@ -53,7 +55,7 @@ exports.postNewSubject = async function (req, res) {
 		res.send({
 			status: 201,
 			message: 'Subject created successfully',
-			data: { subject: newSubject, class: classFromDb },
+			data: newSubject,
 		});
 	} catch (err) {
 		res.send({
