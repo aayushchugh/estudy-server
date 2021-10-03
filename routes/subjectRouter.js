@@ -7,5 +7,6 @@ router.route('/subject/add').post(subjectController.postNewSubject);
 router.route('/subject/get-all').get(subjectController.getAllSubjects);
 router.route('/subject/get-single/:id').get(subjectController.getSingleSubject);
 router.route('/subject/update/:id').patch(subjectController.patchSubject);
+router.route('/subject/delete/:id').delete(subjectController.deleteSubject);
 
 module.exports = router;

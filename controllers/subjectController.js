@@ -40,7 +40,8 @@ exports.postNewSubject = async function (req, res) {
 		// create new subject
 		const newSubject = await Subject.create({
 			title: title,
-
+			classTitle: classFromDb.title,
+			classId: classFromDb._id,
 			notes: [],
 			pyqs: [],
 			ncertSolutions: [],
@@ -164,6 +165,56 @@ exports.patchSubject = async function (req, res) {
 		res.send({
 			status: 500,
 			message: 'internal server error',
+		});
+	}
+};
+
+/* ----------------------------- delete subject ----------------------------- */
+exports.deleteSubject = async function (req, res) {
+	try {
+		const { id } = req.params;
+
+		// get subject from db
+		const subject = await Subject.findById(id);
+
+		// get subject class
+		const classFromDb = await Class.findById(subject.classId);
+
+		// find subject in class
+		const subjectInClass = await classFromDb.subjects.find(
+			id => id === subject._id
+		);
+
+		// remove subject from class
+
+		classFromDb.subjects.splice(
+			classFromDb.subjects.indexOf(subjectInClass),
+			1
+		);
+
+		await classFromDb.save();
+
+		// delete subject
+		const deletedSubject = await Subject.findByIdAndDelete(id);
+
+		// check if subject exists
+		if (!deletedSubject) {
+			return res.send({
+				status: 400,
+				message: 'subject not found invalid id',
+			});
+		}
+
+		// send response
+		res.send({
+			status: 200,
+			message: 'subject deleted successfully',
+			data: deletedSubject,
+		});
+	} catch (err) {
+		res.send({
+			status: 400,
+			message: 'invalid id',
 		});
 	}
 };
