@@ -40,8 +40,7 @@ exports.postNewSubject = async function (req, res) {
 		// create new subject
 		const newSubject = await Subject.create({
 			title: title,
-			classId: classFromDb._id,
-			classTitle: classFromDb.title,
+
 			notes: [],
 			pyqs: [],
 			ncertSolutions: [],
@@ -80,6 +79,35 @@ exports.getAllSubjects = async function (req, res) {
 		res.send({
 			status: 500,
 			message: 'internal server error',
+		});
+	}
+};
+
+/* --------------------------- get single subject --------------------------- */
+exports.getSingleSubject = async function (req, res) {
+	try {
+		const { id } = req.params;
+
+		// get subject from db
+		const subject = await Subject.findById(id);
+
+		// check if subject exists
+		if (!subject) {
+			return res.send({
+				status: 400,
+				message: 'subject not found invalid id',
+			});
+		}
+
+		// send response
+		res.send({
+			status: 200,
+			data: subject,
+		});
+	} catch (err) {
+		res.send({
+			status: 400,
+			message: 'invalid id',
 		});
 	}
 };
