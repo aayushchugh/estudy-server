@@ -64,3 +64,22 @@ exports.postNewSubject = async function (req, res) {
 		});
 	}
 };
+
+/* ---------------------------- get all subjects ---------------------------- */
+exports.getAllSubjects = async function (req, res) {
+	try {
+		// get all subjects from db
+		const subjects = await Subject.find();
+
+		// send response
+		res.send({
+			status: 200,
+			data: subjects,
+		});
+	} catch (err) {
+		res.send({
+			status: 500,
+			message: 'internal server error',
+		});
+	}
+};
