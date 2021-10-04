@@ -49,14 +49,27 @@ exports.postNewClass = async function (req, res) {
 /* ----------------------------- get all classes ---------------------------- */
 exports.getAllClasses = async function (req, res) {
 	try {
-		// get all classes
-		const classes = await Class.find().populate('subjects');
+		const { subjects } = req.query;
 
-		// send response
-		res.send({
-			status: 200,
-			data: classes,
-		});
+		if (subjects === 'true') {
+			// get all classes
+			const classes = await Class.find().populate('subjects');
+
+			// send response
+			res.send({
+				status: 200,
+				data: classes,
+			});
+		} else {
+			// get all classes
+			const classes = await Class.find();
+
+			// send response
+			res.send({
+				status: 200,
+				data: classes,
+			});
+		}
 	} catch (err) {
 		res.send({
 			status: 500,
@@ -70,22 +83,41 @@ exports.getSingleClass = async function (req, res) {
 	try {
 		// get class id
 		const { id } = req.params;
+		const { subjects } = req.query;
 
-		// get class
-		const classInfo = await Class.findById(id).populate('subjects');
+		if (subjects === 'true') {
+			// get class
+			const classInfo = await Class.findById(id).populate('subjects');
 
-		if (!classInfo) {
-			return res.send({
-				status: 400,
-				message: 'class not found, check id',
+			if (!classInfo) {
+				return res.send({
+					status: 400,
+					message: 'class not found, check id',
+				});
+			}
+
+			// send response
+			res.send({
+				status: 200,
+				data: classInfo,
+			});
+		} else {
+			// get class
+			const classInfo = await Class.findById(id);
+
+			if (!classInfo) {
+				return res.send({
+					status: 400,
+					message: 'class not found, check id',
+				});
+			}
+
+			// send response
+			res.send({
+				status: 200,
+				data: classInfo,
 			});
 		}
-
-		// send response
-		res.send({
-			status: 200,
-			data: classInfo,
-		});
 	} catch (err) {
 		res.send({
 			status: 400,
@@ -129,7 +161,7 @@ exports.patchClass = async function (req, res) {
 				description: description,
 			},
 			{ new: true }
-		).populate('subjects');
+		);
 
 		// check if class exists
 		if (!updatedClass) {
@@ -159,9 +191,7 @@ exports.deleteClass = async function (req, res) {
 		const { id } = req.params;
 
 		// delete class
-		const deletedClass = await Class.findByIdAndDelete(id).populate(
-			'subjects'
-		);
+		const deletedClass = await Class.findByIdAndDelete(id);
 
 		// check if class exists
 		if (!deletedClass) {
