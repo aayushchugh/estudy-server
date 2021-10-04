@@ -52,6 +52,8 @@ exports.postNewNote = async function (req, res) {
 			link: link,
 			subjectTitle: subjectFromDb.title,
 			subjectId: subjectFromDb._id,
+			classId: classFromDb._id,
+			classTitle: classFromDb.title,
 		});
 
 		// add note to subject
@@ -133,6 +135,35 @@ exports.getAllNotes = async function (req, res) {
 		res.send({
 			status: 500,
 			message: 'internal server error',
+		});
+	}
+};
+
+/* ----------------------------- get single note ---------------------------- */
+exports.getSingleNote = async function (req, res) {
+	try {
+		const { id } = req.params;
+
+		// find note
+		const note = await Notes.findById(id);
+
+		// check if note exists
+		if (!note) {
+			return res.send({
+				status: 400,
+				message: 'note does not exist check your id',
+			});
+		}
+
+		// send note
+		res.send({
+			status: 200,
+			data: note,
+		});
+	} catch (err) {
+		res.send({
+			status: 400,
+			message: 'invalid id',
 		});
 	}
 };

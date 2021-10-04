@@ -5,6 +5,8 @@ const notesSchema = new mongoose.Schema({
 	link: { type: String, required: true },
 	subjectTitle: { type: String, required: true },
 	subjectId: { type: String, required: true },
+	classId: { type: String, required: true },
+	classTitle: { type: String, required: true },
 });
 
 module.exports = mongoose.model('Notes', notesSchema);

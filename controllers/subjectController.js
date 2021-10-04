@@ -68,10 +68,18 @@ exports.postNewSubject = async function (req, res) {
 /* ---------------------------- get all subjects ---------------------------- */
 exports.getAllSubjects = async function (req, res) {
 	try {
-		const { class: classFromQuery } = req.query;
+		const { class: classFromQuery, all } = req.query;
+
+		// validate input
+		if (all && all !== 'true') {
+			return res.send({
+				status: 400,
+				message: 'all must be true',
+			});
+		}
 
 		// send all classes
-		if (!classFromQuery || classFromQuery === 'all') {
+		if (all === 'true') {
 			// get all subjects from db
 			const subjects = await Subject.find();
 
