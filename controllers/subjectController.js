@@ -68,13 +68,37 @@ exports.postNewSubject = async function (req, res) {
 /* ---------------------------- get all subjects ---------------------------- */
 exports.getAllSubjects = async function (req, res) {
 	try {
-		// get all subjects from db
-		const subjects = await Subject.find();
+		const { class: classFromQuery } = req.query;
+
+		// send all classes
+		if (!classFromQuery || classFromQuery === 'all') {
+			// get all subjects from db
+			const subjects = await Subject.find();
+
+			// send response
+			return res.send({
+				status: 200,
+				data: subjects,
+			});
+		}
+
+		// get class from db
+		const classFromDb = await Class.findOne({
+			title: classFromQuery,
+		}).populate('subjects');
+
+		// check if class exists
+		if (!classFromDb) {
+			return res.send({
+				status: 400,
+				message: 'Class not found',
+			});
+		}
 
 		// send response
 		res.send({
 			status: 200,
-			data: subjects,
+			data: classFromDb.subjects,
 		});
 	} catch (err) {
 		res.send({
