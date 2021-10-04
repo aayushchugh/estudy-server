@@ -71,3 +71,68 @@ exports.postNewNote = async function (req, res) {
 		});
 	}
 };
+
+/* ------------------------------ get all notes ----------------------------- */
+
+exports.getAllNotes = async function (req, res) {
+	try {
+		const { subject, class: classFromQuery, all } = req.query;
+
+		// validate user input
+		if (subject && !classFromQuery) {
+			return res.send({
+				status: 400,
+				message: 'subject and class both are required together',
+			});
+			// eslint-disable-next-line sonarjs/no-duplicated-branches
+		} else if (!subject && classFromQuery) {
+			return res.send({
+				status: 400,
+				message: 'subject and class both are required together',
+			});
+		}
+
+		if (all && all !== 'true') {
+			return res.send({
+				status: 400,
+				message: 'all must be true',
+			});
+		}
+
+		// send all notes if all is true
+		if (all === 'true') {
+			// get all notes
+			const allNotes = await Notes.find();
+
+			return res.send({
+				status: 200,
+				data: allNotes,
+			});
+		}
+
+		// get subject from db
+		const subjectFromDb = await Subject.findOne({
+			title: subject,
+			classTitle: classFromQuery,
+		}).populate('notes');
+
+		// check if subject exists
+		if (!subjectFromDb) {
+			return res.send({
+				status: 400,
+				message: 'subject or class does not exist',
+			});
+		}
+
+		// send notes
+		res.send({
+			status: 200,
+			data: subjectFromDb.notes,
+		});
+	} catch (err) {
+		res.send({
+			status: 500,
+			message: 'internal server error',
+		});
+	}
+};
