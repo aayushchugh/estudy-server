@@ -167,3 +167,48 @@ exports.getSingleNote = async function (req, res) {
 		});
 	}
 };
+
+/* ------------------------------- update note ------------------------------ */
+exports.patchNote = async function (req, res) {
+	try {
+		const { id } = req.params;
+		const { title, link } = req.body;
+
+		// validate user input
+		if (!title || !link) {
+			return res.send({
+				status: 400,
+				message: 'both title and link are required',
+			});
+		}
+
+		// update note
+		const updatedNotes = await Notes.findByIdAndUpdate(
+			id,
+			{
+				title: title,
+				link: link,
+			},
+			{ new: true }
+		);
+
+		// check if note exists
+		if (!updatedNotes) {
+			return res.send({
+				status: 400,
+				message: 'note does not exist check your id',
+			});
+		}
+
+		// send note
+		res.send({
+			status: 200,
+			data: updatedNotes,
+		});
+	} catch (err) {
+		res.send({
+			status: 400,
+			message: 'invalid id',
+		});
+	}
+};
