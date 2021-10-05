@@ -203,7 +203,38 @@ exports.patchNote = async function (req, res) {
 		// send note
 		res.send({
 			status: 200,
+			message: 'note updated successfully',
 			data: updatedNotes,
+		});
+	} catch (err) {
+		res.send({
+			status: 400,
+			message: 'invalid id',
+		});
+	}
+};
+
+/* ------------------------------- delete note ------------------------------- */
+exports.deleteNote = async function (req, res) {
+	try {
+		const { id } = req.params;
+
+		// delete note
+		const deletedNote = await Notes.findByIdAndDelete(id);
+
+		// check if note exists
+		if (!deletedNote) {
+			return res.send({
+				status: 400,
+				message: 'note does not exist check your id',
+			});
+		}
+
+		// send response
+		res.send({
+			status: 200,
+			message: 'note deleted',
+			data: deletedNote,
 		});
 	} catch (err) {
 		res.send({
