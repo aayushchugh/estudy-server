@@ -13,6 +13,7 @@ const contactUsRouter = require('./routes/contactUsRouter');
 const classRouter = require('./routes/classRouter');
 const subjectRouter = require('./routes/subjectRouter');
 const notesRouter = require('./routes/notesRouter');
+const pyqRouter = require('./routes/pyqRouter');
 
 const app = express();
 
@@ -39,5 +40,6 @@ app.use('/v1', contactUsRouter);
 app.use('/v1', classRouter);
 app.use('/v1', subjectRouter);
 app.use('/v1', notesRouter);
+app.use('/v1', pyqRouter);
 
 module.exports = app;

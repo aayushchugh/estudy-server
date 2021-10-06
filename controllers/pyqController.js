@@ -1,9 +1,9 @@
 const Class = require('../models/classModel');
 const Subject = require('../models/subjectModel');
-const Notes = require('../models/notesModel');
+const Pyqs = require('../models/pyqModel');
 
-/* ------------------------------ post new note ----------------------------- */
-exports.postNewNote = async function (req, res) {
+/* ------------------------------ post new pyq ----------------------------- */
+exports.postNewPyq = async function (req, res) {
 	try {
 		const { title, link, subject, class: userClass } = req.body;
 
@@ -46,8 +46,8 @@ exports.postNewNote = async function (req, res) {
 			_id: subjectFromClass._id,
 		});
 
-		// crete new note
-		const newNote = await Notes.create({
+		// crete new pyq
+		const newPyq = await Pyqs.create({
 			title: title,
 			link: link,
 			subjectTitle: subjectFromDb.title,
@@ -56,15 +56,15 @@ exports.postNewNote = async function (req, res) {
 			classTitle: classFromDb.title,
 		});
 
-		// add note to subject
-		subjectFromDb.notes.push(newNote._id);
+		// add pyq to subject
+		subjectFromDb.pyqs.push(newPyq._id);
 		subjectFromDb.save();
 
 		// send response
 		res.send({
 			status: 201,
-			message: 'note created',
-			data: newNote,
+			message: 'pyq created',
+			data: newPyq,
 		});
 	} catch (err) {
 		res.send({
@@ -74,9 +74,9 @@ exports.postNewNote = async function (req, res) {
 	}
 };
 
-/* ------------------------------ get all notes ----------------------------- */
+/* ------------------------------ get all pyqs ----------------------------- */
 
-exports.getAllNotes = async function (req, res) {
+exports.getAllPyqs = async function (req, res) {
 	try {
 		const { subject, class: classFromQuery, all } = req.query;
 
@@ -108,14 +108,14 @@ exports.getAllNotes = async function (req, res) {
 			});
 		}
 
-		// send all notes if all is true
+		// send all pyqs if all is true
 		if (all === 'true') {
-			// get all notes
-			const allNotes = await Notes.find();
+			// get all pyqs
+			const allPyqs = await Pyqs.find();
 
 			return res.send({
 				status: 200,
-				data: allNotes,
+				data: allPyqs,
 			});
 		}
 
@@ -123,7 +123,7 @@ exports.getAllNotes = async function (req, res) {
 		const subjectFromDb = await Subject.findOne({
 			title: subject,
 			classTitle: classFromQuery,
-		}).populate('notes');
+		}).populate('pyqs');
 
 		// check if subject exists
 		if (!subjectFromDb) {
@@ -133,18 +133,18 @@ exports.getAllNotes = async function (req, res) {
 			});
 		}
 
-		// check if there are notes present in subject
-		if (subjectFromDb.notes.length === 0) {
+		// check if there are pyqs present in subject
+		if (subjectFromDb.pyqs.length === 0) {
 			return res.send({
 				status: 400,
-				message: 'no notes present in subject',
+				message: 'no pyqs present in subject',
 			});
 		}
 
-		// send notes
+		// send pyqs
 		res.send({
 			status: 200,
-			data: subjectFromDb.notes,
+			data: subjectFromDb.pyqs,
 		});
 	} catch (err) {
 		res.send({
@@ -154,26 +154,26 @@ exports.getAllNotes = async function (req, res) {
 	}
 };
 
-/* ----------------------------- get single note ---------------------------- */
-exports.getSingleNote = async function (req, res) {
+/* ----------------------------- get single pyq ---------------------------- */
+exports.getSinglePyq = async function (req, res) {
 	try {
 		const { id } = req.params;
 
-		// find note
-		const note = await Notes.findById(id);
+		// find pyq
+		const pyq = await Pyqs.findById(id);
 
-		// check if note exists
-		if (!note) {
+		// check if pyq exists
+		if (!pyq) {
 			return res.send({
 				status: 400,
-				message: 'note does not exist check your id',
+				message: 'pyq does not exist check your id',
 			});
 		}
 
-		// send note
+		// send pyq
 		res.send({
 			status: 200,
-			data: note,
+			data: pyq,
 		});
 	} catch (err) {
 		res.send({
@@ -183,8 +183,8 @@ exports.getSingleNote = async function (req, res) {
 	}
 };
 
-/* ------------------------------- update note ------------------------------ */
-exports.patchNote = async function (req, res) {
+/* ------------------------------- update pyq ------------------------------ */
+exports.patchPyq = async function (req, res) {
 	try {
 		const { id } = req.params;
 		const { title, link } = req.body;
@@ -197,8 +197,8 @@ exports.patchNote = async function (req, res) {
 			});
 		}
 
-		// update note
-		const updatedNotes = await Notes.findByIdAndUpdate(
+		// update pyq
+		const updatedPyq = await Pyqs.findByIdAndUpdate(
 			id,
 			{
 				title: title,
@@ -207,19 +207,19 @@ exports.patchNote = async function (req, res) {
 			{ new: true }
 		);
 
-		// check if note exists
-		if (!updatedNotes) {
+		// check if pyq exists
+		if (!updatedPyq) {
 			return res.send({
 				status: 400,
-				message: 'note does not exist check your id',
+				message: 'pyq does not exist check your id',
 			});
 		}
 
-		// send note
+		// send pyq
 		res.send({
 			status: 200,
-			message: 'note updated successfully',
-			data: updatedNotes,
+			message: 'pyq updated successfully',
+			data: updatedPyq,
 		});
 	} catch (err) {
 		res.send({
@@ -229,46 +229,44 @@ exports.patchNote = async function (req, res) {
 	}
 };
 
-/* ------------------------------- delete note ------------------------------- */
-exports.deleteNote = async function (req, res) {
+/* ------------------------------- delete pyq ------------------------------- */
+exports.deletePyq = async function (req, res) {
 	try {
 		const { id } = req.params;
 
-		// find note
-		const note = await Notes.findById(id);
+		// find pyq
+		const pyq = await Pyqs.findById(id);
 
-		// check if note exists
-		if (!note) {
+		// check if pyq exists
+		if (!pyq) {
 			return res.send({
 				status: 400,
-				message: 'note does not exist check your id',
+				message: 'pyq does not exist check your id',
 			});
 		}
 
-		// remove note from subject
-		const subject = await Subject.findById(note.subjectId).populate(
-			'notes'
-		);
+		// remove pyq from subject
+		const subject = await Subject.findById(pyq.subjectId).populate('pyqs');
 
-		subject.notes.splice(note._id, 1);
+		subject.pyqs.splice(pyq._id, 1);
 		subject.save();
 
-		// delete note
-		const deletedNote = await Notes.findByIdAndDelete(id);
+		// delete pyq
+		const deletedPyq = await Pyqs.findByIdAndDelete(id);
 
-		// check if note exists
-		if (!deletedNote) {
+		// check if pyq exists
+		if (!deletedPyq) {
 			return res.send({
 				status: 400,
-				message: 'note does not exist check your id',
+				message: 'pyq does not exist check your id',
 			});
 		}
 
 		// send response
 		res.send({
 			status: 200,
-			message: 'note deleted',
-			data: deletedNote,
+			message: 'pyq deleted',
+			data: deletedPyq,
 		});
 	} catch (err) {
 		res.send({
