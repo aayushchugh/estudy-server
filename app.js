@@ -14,6 +14,7 @@ const classRouter = require('./routes/classRouter');
 const subjectRouter = require('./routes/subjectRouter');
 const notesRouter = require('./routes/notesRouter');
 const pyqRouter = require('./routes/pyqRouter');
+const ncertSolutionRouter = require('./routes/ncertSolutionRouter');
 
 const app = express();
 
@@ -41,5 +42,6 @@ app.use('/v1', classRouter);
 app.use('/v1', subjectRouter);
 app.use('/v1', notesRouter);
 app.use('/v1', pyqRouter);
+app.use('/v1', ncertSolutionRouter);
 
 module.exports = app;
