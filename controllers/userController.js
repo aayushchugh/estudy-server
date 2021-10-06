@@ -30,7 +30,7 @@ exports.patchUser = async function (req, res) {
 		const { name, userClass, userPassword, updatePassword } = req.body;
 
 		// validate user input
-		if (!name || !userClass || !userPassword || !updatePassword) {
+		if (!name || !userClass || !userPassword) {
 			return res.send({
 				status: 400,
 				message:
