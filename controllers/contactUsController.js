@@ -100,7 +100,8 @@ exports.getSingleContact = async function (req, res) {
 
 exports.patchContact = async function (req, res) {
 	try {
-		const { id, status } = req.body;
+		const { id } = req.params;
+		const { status } = req.body;
 
 		// validate input
 		if (!id || !status) {

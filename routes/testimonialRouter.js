@@ -11,7 +11,7 @@ router
 	.get(testimonialController.getAllTestimonials);
 
 router
-	.route('/testimonial/single-testimonial/:id')
+	.route('/testimonial/get-single/:id')
 	.get(testimonialController.getSingleTestimonial);
 
 router
