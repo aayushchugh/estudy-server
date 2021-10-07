@@ -1,4 +1,8 @@
 const Class = require('../models/classModel');
+const Subject = require('../models/subjectModel');
+const Notes = require('../models/notesModel');
+const Pyq = require('../models/pyqModel');
+const NcertSolution = require('../models/ncertSolutionModel');
 
 /* ------------------------------ add new class ----------------------------- */
 
@@ -190,16 +194,32 @@ exports.deleteClass = async function (req, res) {
 		// get class id
 		const { id } = req.params;
 
-		// delete class
-		const deletedClass = await Class.findByIdAndDelete(id);
+		// get class from db
+		const classInfo = await Class.findById(id).populate('subjects');
 
 		// check if class exists
-		if (!deletedClass) {
+		if (!classInfo) {
 			return res.send({
 				status: 400,
 				message: 'class not found, check id',
 			});
 		}
+
+		// delete notes, pyq, and ncert solutions from db
+		classInfo.subjects.forEach(async subject => {
+			await Notes.deleteMany({ _id: { $in: subject.notes } });
+
+			await NcertSolution.deleteMany({
+				_id: { $in: subject.ncertSolutions },
+			});
+
+			await Pyq.deleteMany({ _id: { $in: subject.pyqs } });
+		}),
+			// delete subjects from class
+			await Subject.deleteMany({ _id: { $in: classInfo.subjects } });
+
+		// delete class
+		const deletedClass = await Class.findByIdAndDelete(id);
 
 		// send data
 		res.send({
