@@ -22,6 +22,18 @@ exports.postNewTestimonial = async function (req, res) {
 			});
 		}
 
+		// check if testimonial already exists
+		const existingTestimonial = await Testimonial.findOne({
+			name: name,
+		});
+
+		if (existingTestimonial) {
+			return res.send({
+				status: 400,
+				message: 'Testimonial already exists',
+			});
+		}
+
 		// create new testimonial
 		const newTestimonial = await Testimonial.create({
 			name: name,
