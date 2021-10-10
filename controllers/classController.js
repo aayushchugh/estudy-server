@@ -206,6 +206,7 @@ exports.deleteClass = async function (req, res) {
 		}
 
 		// delete notes, pyq, and ncert solutions from db
+
 		classInfo.subjects.forEach(async subject => {
 			await Notes.deleteMany({ _id: { $in: subject.notes } });
 

@@ -1,5 +1,8 @@
 const Class = require('../models/classModel');
 const Subject = require('../models/subjectModel');
+const Notes = require('../models/notesModel');
+const Pyq = require('../models/pyqModel');
+const NcertSolution = require('../models/ncertSolutionModel');
 
 exports.postNewSubject = async function (req, res) {
 	try {
@@ -209,6 +212,21 @@ exports.deleteSubject = async function (req, res) {
 		// get subject from db
 		const subject = await Subject.findById(id);
 
+		// check if subject exists
+		if (!subject) {
+			return res.send({
+				status: 400,
+				message: 'subject not found invalid id',
+			});
+		}
+
+		// delete notes, pyq, and ncert solutions from db
+		await Notes.deleteMany({ _id: { $in: subject.notes } });
+		await Pyq.deleteMany({ _id: { $in: subject.pyqs } });
+		await NcertSolution.deleteMany({
+			_id: { $in: subject.ncertSolutions },
+		});
+
 		// get subject class
 		const classFromDb = await Class.findById(subject.classId);
 
@@ -218,7 +236,6 @@ exports.deleteSubject = async function (req, res) {
 		);
 
 		// remove subject from class
-
 		classFromDb.subjects.splice(
 			classFromDb.subjects.indexOf(subjectInClass),
 			1
