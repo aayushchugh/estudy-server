@@ -164,7 +164,15 @@ exports.patchSubject = async function (req, res) {
 
 		// check if subject with same title exits already
 
-		const subjectWithSameTitle = await Subject.findOne({ title: title });
+		const subject = await Subject.findById(id);
+
+		const subjectClass = await Class.findById(subject.classId).populate(
+			'subjects'
+		);
+
+		const subjectWithSameTitle = subjectClass.subjects.find(
+			subject => subject.title === title
+		);
 
 		if (subjectWithSameTitle) {
 			return res.send({
