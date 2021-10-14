@@ -88,9 +88,18 @@ exports.getAllNotes = async function (req, res) {
 			});
 			// eslint-disable-next-line sonarjs/no-duplicated-branches
 		} else if (!subject && classFromQuery) {
+			const notes = await Notes.find({ classTitle: classFromQuery });
+
+			if (!notes || notes.length === 0) {
+				return res.send({
+					status: 400,
+					message: 'there are no notes for this class',
+				});
+			}
+
 			return res.send({
-				status: 400,
-				message: 'subject and class both are required together',
+				status: 200,
+				data: notes,
 			});
 		}
 

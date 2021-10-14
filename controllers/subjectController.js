@@ -4,6 +4,8 @@ const Notes = require('../models/notesModel');
 const Pyq = require('../models/pyqModel');
 const NcertSolution = require('../models/ncertSolutionModel');
 
+/* ----------------------------- add new subject ---------------------------- */
+
 exports.postNewSubject = async function (req, res) {
 	try {
 		const { title, class: classFromUser } = req.body;
