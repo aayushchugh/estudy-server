@@ -88,9 +88,20 @@ exports.getAllNcertSolution = async function (req, res) {
 			});
 			// eslint-disable-next-line sonarjs/no-duplicated-branches
 		} else if (!subject && classFromQuery) {
+			const ncertSolutions = await NcertSolution.find({
+				classTitle: classFromQuery,
+			});
+
+			if (!ncertSolutions || ncertSolutions.length === 0) {
+				return res.send({
+					status: 400,
+					message: 'there are no ncertSolutions for this class',
+				});
+			}
+
 			return res.send({
-				status: 400,
-				message: 'subject and class both are required together',
+				status: 200,
+				data: ncertSolutions,
 			});
 		}
 
