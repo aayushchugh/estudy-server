@@ -13,7 +13,7 @@ exports.postUser = async function (req, res) {
 		if (!name || !email || !password) {
 			return res.send({
 				status: 400,
-				message: 'password is required',
+				message: 'name, email, password all are required',
 			});
 		}
 
