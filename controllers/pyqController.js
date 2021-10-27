@@ -44,7 +44,27 @@ exports.postNewPyq = async function (req, res) {
 		// get subject from db
 		const subjectFromDb = await Subject.findOne({
 			_id: subjectFromClass._id,
-		});
+		}).populate('pyqs');
+
+		// check if subject exists
+		if (!subjectFromDb) {
+			return res.send({
+				status: 400,
+				message: 'subject does not exist',
+			});
+		}
+
+		// check if pyq with same title exists
+		const pyqWithSameTitle = subjectFromDb.pyqs.find(
+			pyq => pyq.title === title
+		);
+
+		if (pyqWithSameTitle) {
+			return res.send({
+				status: 400,
+				message: 'pyq with same title already exists',
+			});
+		}
 
 		// crete new pyq
 		const newPyq = await Pyqs.create({

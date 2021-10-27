@@ -44,7 +44,27 @@ exports.postNewNcertSolution = async function (req, res) {
 		// get subject from db
 		const subjectFromDb = await Subject.findOne({
 			_id: subjectFromClass._id,
-		});
+		}).populate('ncertSolutions');
+
+		// check if subject exists
+		if (!subjectFromDb) {
+			return res.send({
+				status: 400,
+				message: 'subject does not exist',
+			});
+		}
+
+		// check if ncertSolutions with same title already exists
+		const ncertSolutionExists = subjectFromDb.ncertSolutions.find(
+			solution => solution.title === title
+		);
+
+		if (ncertSolutionExists) {
+			return res.send({
+				status: 400,
+				message: 'ncert solution with same title already exists',
+			});
+		}
 
 		// crete new ncert solution
 		const newNcertSolution = await NcertSolution.create({

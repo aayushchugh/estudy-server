@@ -44,7 +44,27 @@ exports.postNewNote = async function (req, res) {
 		// get subject from db
 		const subjectFromDb = await Subject.findOne({
 			_id: subjectFromClass._id,
-		});
+		}).populate('notes');
+
+		// check if subject exists
+		if (!subjectFromDb) {
+			return res.send({
+				status: 400,
+				message: 'subject does not exist',
+			});
+		}
+
+		// check if note with same title exists
+		const noteWithSameTitle = subjectFromDb.notes.find(
+			note => note.title === title
+		);
+
+		if (noteWithSameTitle) {
+			return res.send({
+				status: 400,
+				message: 'note with same title already exists',
+			});
+		}
 
 		// crete new note
 		const newNote = await Notes.create({
