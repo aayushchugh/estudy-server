@@ -75,6 +75,13 @@ exports.getAllSubjects = async function (req, res) {
 	try {
 		const { class: classFromQuery, all } = req.query;
 
+		if (all && classFromQuery) {
+			return res.send({
+				status: 400,
+				message: "all and class can't be together",
+			});
+		}
+
 		// validate input
 		if (all && all !== 'true') {
 			return res.send({
