@@ -73,7 +73,27 @@ exports.postNewSubject = async function (req, res) {
 /* ---------------------------- get all subjects ---------------------------- */
 exports.getAllSubjects = async function (req, res) {
 	try {
-		const { class: classFromQuery, all } = req.query;
+		const {
+			class: classFromQuery,
+			all,
+			notes,
+			pyqs,
+			ncertSolutions,
+			allThings,
+		} = req.query;
+
+		// validate query
+		if (
+			(notes && notes !== 'true') ||
+			(pyqs && pyqs !== 'true') ||
+			(ncertSolutions && ncertSolutions !== 'true') ||
+			(allThings && allThings !== 'true')
+		) {
+			return res.send({
+				status: 400,
+				message: 'your query are not correct the must be true or null',
+			});
+		}
 
 		if (all && classFromQuery) {
 			return res.send({
@@ -82,11 +102,53 @@ exports.getAllSubjects = async function (req, res) {
 			});
 		}
 
-		// validate input
 		if (all && all !== 'true') {
 			return res.send({
 				status: 400,
 				message: 'all must be true',
+			});
+		}
+
+		// send with notes
+		if (notes && notes === 'true') {
+			const subjects = await Subject.find().populate('notes');
+
+			return res.send({
+				status: 200,
+				data: subjects,
+			});
+		}
+
+		// send with pyqs
+		if (pyqs && pyqs === 'true') {
+			const subjects = await Subject.find().populate('pyqs');
+
+			return res.send({
+				status: 200,
+				data: subjects,
+			});
+		}
+
+		// send with ncertSolutions
+		if (ncertSolutions && ncertSolutions === 'true') {
+			const subjects = await Subject.find().populate('ncertSolutions');
+
+			return res.send({
+				status: 200,
+				data: subjects,
+			});
+		}
+
+		// send all
+		if (allThings && allThings === 'true') {
+			const subjects = await Subject.find()
+				.populate('notes')
+				.populate('pyqs')
+				.populate('ncertSolutions');
+
+			return res.send({
+				status: 200,
+				data: subjects,
 			});
 		}
 
