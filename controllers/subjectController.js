@@ -132,6 +132,65 @@ exports.getAllSubjects = async function (req, res) {
 exports.getSingleSubject = async function (req, res) {
 	try {
 		const { id } = req.params;
+		const { notes, pyqs, ncertSolutions, all } = req.query;
+
+		// validate query
+		if (
+			(notes && notes !== 'true') ||
+			(pyqs && pyqs !== 'true') ||
+			(ncertSolutions && ncertSolutions !== 'true') ||
+			(all && all !== 'true')
+		) {
+			return res.send({
+				status: 400,
+				message: 'your query are not correct the must be true or null',
+			});
+		}
+
+		// send with notes
+		if (notes && notes === 'true') {
+			const subject = await Subject.findById(id).populate('notes');
+
+			return res.send({
+				status: 200,
+				data: subject,
+			});
+		}
+
+		// send with pyqs
+		if (pyqs && pyqs === 'true') {
+			const subject = await Subject.findById(id).populate('pyqs');
+
+			return res.send({
+				status: 200,
+				data: subject,
+			});
+		}
+
+		// send with ncertSolutions
+		if (ncertSolutions && ncertSolutions === 'true') {
+			const subject = await Subject.findById(id).populate(
+				'ncertSolutions'
+			);
+
+			return res.send({
+				status: 200,
+				data: subject,
+			});
+		}
+
+		// send all
+		if (all && all === 'true') {
+			const subject = await Subject.findById(id)
+				.populate('notes')
+				.populate('pyqs')
+				.populate('ncertSolutions');
+
+			return res.send({
+				status: 200,
+				data: subject,
+			});
+		}
 
 		// get subject from db
 		const subject = await Subject.findById(id);
