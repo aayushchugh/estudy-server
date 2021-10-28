@@ -151,6 +151,14 @@ exports.getSingleSubject = async function (req, res) {
 		if (notes && notes === 'true') {
 			const subject = await Subject.findById(id).populate('notes');
 
+			// check if subject exists
+			if (!subject) {
+				return res.send({
+					status: 400,
+					message: 'subject not found invalid id',
+				});
+			}
+
 			return res.send({
 				status: 200,
 				data: subject,
@@ -160,6 +168,14 @@ exports.getSingleSubject = async function (req, res) {
 		// send with pyqs
 		if (pyqs && pyqs === 'true') {
 			const subject = await Subject.findById(id).populate('pyqs');
+
+			// check if subject exists
+			if (!subject) {
+				return res.send({
+					status: 400,
+					message: 'subject not found invalid id',
+				});
+			}
 
 			return res.send({
 				status: 200,
@@ -173,6 +189,14 @@ exports.getSingleSubject = async function (req, res) {
 				'ncertSolutions'
 			);
 
+			// check if subject exists
+			if (!subject) {
+				return res.send({
+					status: 400,
+					message: 'subject not found invalid id',
+				});
+			}
+
 			return res.send({
 				status: 200,
 				data: subject,
@@ -185,6 +209,14 @@ exports.getSingleSubject = async function (req, res) {
 				.populate('notes')
 				.populate('pyqs')
 				.populate('ncertSolutions');
+
+			// check if subject exists
+			if (!subject) {
+				return res.send({
+					status: 400,
+					message: 'subject not found invalid id',
+				});
+			}
 
 			return res.send({
 				status: 200,
