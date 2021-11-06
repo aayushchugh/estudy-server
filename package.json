@@ -36,6 +36,6 @@
 		"lint": "eslint --fix ./app.js ./server.js ./controllers/** ./models/** ./routes/** ./public/js/**"
 	},
 	"engines": {
-		"node": "17.x"
+		"node": "16.x"
 	}
 }
