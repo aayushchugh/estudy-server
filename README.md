@@ -27,10 +27,6 @@ A place where you can get all the notes you want for your class
 -   [MongoDB](https://www.mongodb.com/)
 -   [Mongoose](https://mongoosejs.com/)
 
-## Api Reference
-
-### [Here](./API-REFERENCE.md)
-
 ## Authors
 
 -   [@aayushchugh](https://github.com/aayushchugh/)
